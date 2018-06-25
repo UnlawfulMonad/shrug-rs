@@ -1,13 +1,27 @@
 extern crate hyper;
 
+use std::env;
+
 use hyper::{Body, Request, Response, Server, StatusCode};
 use hyper::rt::Future;
 use hyper::service::service_fn_ok;
 
+const SHRUG: &str = "¯\\_(ツ)_/¯";
 const SHRUG_NL: &str = "¯\\_(ツ)_/¯\n";
 
 fn main() {
-    let port = 3000; // TODO read from command line
+    let args = env::args().skip(1).collect::<Vec<_>>();
+    let port = if args.len() > 0 {
+        match args[0].parse() {
+            Ok(port) => port,
+            Err(err) => {
+                eprintln!("Failed to parse port {}: {:?}", SHRUG, err);
+                return;
+            }
+        }
+    } else {
+        3000
+    };
 
     let listen_addr = ([0, 0, 0, 0], port).into();
     let svc = || {
