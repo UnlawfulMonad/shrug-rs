@@ -1,0 +1,7 @@
+[package]
+name = "shrug-rs"
+version = "0.1.0"
+authors = ["Lucas Salibian <lucas.salibian@gmail.com>"]
+
+[dependencies]
+hyper = "0.12"
