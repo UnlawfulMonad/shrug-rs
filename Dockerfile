@@ -1,14 +1,12 @@
-FROM rust:1.27
-RUN mkdir /src
-WORKDIR /src
+FROM rust:1.38.0 AS build
+RUN mkdir /build
+WORKDIR /build
 
-COPY Cargo.* /src/
-RUN mkdir /src/src
-COPY src/ /src/src
+COPY . /build
 
-RUN cargo build --release && \
-    cp /src/target/release/shrug-rs / && \
-    cargo clean
+RUN cargo build --release
 
+FROM debian:10
+COPY --from=build /build/target/release/shrug-rs /shrug-rs
 EXPOSE 3000
 CMD /shrug-rs
